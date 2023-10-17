@@ -35,6 +35,15 @@ def valve(temperaturas, factor_expansion):
     temperaturas_expandidas = [math.exp(t * factor_expansion) for t in temperaturas]
     return temperaturas_expandidas
 
+def heat_dissipation(temperaturas_expandidas, factor_dispersión):
+    temperaturas_disminuidas = []
+    temperatura_actual = 2  # Temperatura inicial (primer número primo como 0 Kelvin)
+    for temperatura_expandida in temperaturas_expandidas:
+        temperatura_actual -= factor_dispersión
+        temperaturas_disminuidas.append(temperatura_actual)
+    return temperaturas_disminuidas
+
+
 # Obtiene las temperaturas resultantes antes de la expansión exponencial
 temperaturas_resultantes = compressor()
 
@@ -44,14 +53,20 @@ factor_expansion = 0.05
 # Obtiene las temperaturas expandidas de manera exponencial
 temperaturas_expandidas = valve(temperaturas_resultantes, factor_expansion)
 
-# Combina las temperaturas antes y después de la transición
-temperaturas_combinadas = temperaturas_resultantes + temperaturas_expandidas
+# Factor de dispersión de calor
+factor_dispersión = 25  # Puedes ajustar este valor según sea necesario
 
+# Aplica la dispersión de calor a las temperaturas expandidas
+temperaturas_con_dispersión = heat_dissipation(temperaturas_expandidas, factor_dispersión)
 
+# Combina las temperaturas antes, durante y después de la transición
+temperaturas_combinadas = temperaturas_resultantes + temperaturas_expandidas + temperaturas_con_dispersión
+
+# Gráfica
 plt.plot(temperaturas_combinadas, marker='o', color='b', label='Curva de Temperatura del Sistema de Refrigeración')
-plt.xlabel('Variación de la temperatura entre el compror y la válvula de expansión expresada')
+plt.xlabel('Variación de la temperatura entre el compresor y la válvula de expansión expresada')
 plt.ylabel('Temperatura (Kelvin)')
-plt.title('Emulador de sistema de refrigeración utilzando Intervalos de Números Primos')
+plt.title('Emulador de sistema de refrigeración utilizando Intervalos de Números Primos')
 plt.legend()
 plt.grid(True)
 plt.show()
